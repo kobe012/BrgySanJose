@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
     public function GoogleCallback()
     {
         $gUser = Socialite::driver("google")->stateless()->user();
-        dd($gUser);
+
         // Since the User model doesn't have email field,
         // we'll use the Google email as username
         $googleEmail = $gUser->getEmail();
