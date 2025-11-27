@@ -1,8 +1,8 @@
 <script setup>
 import Layout from '@/layouts/Layout.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { ref, onMounted, defineAsyncComponent } from 'vue';
 import { animate, inView } from 'motion';
+import { defineAsyncComponent, onMounted, ref } from 'vue';
 
 // Lazy-loaded components
 const ServiceSection = defineAsyncComponent(() => import('@/components/ServiceSection.vue'));
@@ -15,16 +15,24 @@ const BarangayOfficials = defineAsyncComponent(() => import('@/components/Barang
 const showHero = ref(true);
 
 onMounted(() => {
-    animate('.hero-content', {
-        opacity: [0, 1],
-        y: [100, 0],
-    }, { duration: 1 });
+    animate(
+        '.hero-content',
+        {
+            opacity: [0, 1],
+            y: [100, 0],
+        },
+        { duration: 1 },
+    );
 
     inView('.hero', (el) => {
-        animate(el, { opacity: 1, y: [-100, 0] }, {
-            duration: 0.9,
-            easing: [0.17, 0.55, 0.55, 1],
-        });
+        animate(
+            el,
+            { opacity: 1, y: [-100, 0] },
+            {
+                duration: 0.9,
+                easing: [0.17, 0.55, 0.55, 1],
+            },
+        );
         return () => animate(el, { opacity: 0, y: -100 }, { duration: 1 });
     });
 });
@@ -40,24 +48,24 @@ const goToSection = (elementId) => {
 };
 
 onMounted(() => {
-    const hash = window.location.hash?.substring(1)
-    console.log(usePage().props)
+    const hash = window.location.hash?.substring(1);
+    console.log(usePage().props);
     if (hash) {
         setTimeout(() => {
-            const el = document.getElementById(hash)
-            const headerOffset = document.querySelector('header')?.offsetHeight || 0
+            const el = document.getElementById(hash);
+            const headerOffset = document.querySelector('header')?.offsetHeight || 0;
             if (el) {
-                const elementPosition = el.getBoundingClientRect().top + window.pageYOffset
-                const offsetPosition = elementPosition - headerOffset - 20
+                const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+                const offsetPosition = elementPosition - headerOffset - 20;
 
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: 'smooth',
-                })
+                });
             }
-        }, 300)
+        }, 300);
     }
-})
+});
 </script>
 
 <template>
@@ -72,55 +80,61 @@ onMounted(() => {
 
         <main>
             <!-- Hero Section -->
-            <div class="hero relative w-full min-h-screen overflow-hidden flex flex-col items-center justify-center px-4">
+            <div class="hero relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-4">
                 <!-- Background Image with Overlay -->
                 <div class="absolute inset-0 bg-black/60">
-                    <img src="/images/logo/UPDATEDTODAY.svg"
-                         alt="Tagaytay Background"
-                         class="w-full h-full object-cover"
-                         draggable="false" />
+                    <img src="/images/logo/UPDATEDTODAY.svg" alt="Tagaytay Background" class="h-full w-full object-cover" draggable="false" />
                 </div>
 
                 <!-- Hero Content Card -->
                 <Transition name="fade">
-                    <div v-if="showHero"
-                        class="hero-content relative z-10 text-center w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 rounded-xl sm:rounded-2xl md:rounded-3xl bg-white/20 shadow-2xl border-2 md:border-4 border-green-600 backdrop-blur-md">
-
+                    <div
+                        v-if="showHero"
+                        class="hero-content relative z-10 mx-auto w-full max-w-xs rounded-xl border-2 border-green-600 bg-white/20 px-4 py-8 text-center shadow-2xl backdrop-blur-md sm:max-w-md sm:rounded-2xl sm:px-6 sm:py-12 md:max-w-2xl md:rounded-3xl md:border-4 md:px-8 md:py-16 lg:max-w-3xl"
+                    >
                         <!-- Close Button -->
-                        <button @click="showHero = false"
-                            class="absolute top-2 right-2 sm:top-3 sm:right-3 text-green-900 hover:text-red-600 text-xl sm:text-2xl font-bold bg-white/70 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center shadow-md transition-colors duration-200">
+                        <button
+                            @click="showHero = false"
+                            class="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/70 text-xl font-bold text-green-900 shadow-md transition-colors duration-200 hover:text-red-600 sm:top-3 sm:right-3 sm:h-10 sm:w-10 sm:text-2xl"
+                        >
                             &times;
                         </button>
 
                         <!-- Title -->
-                        <h1 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold text-green-700 mb-3 sm:mb-4 leading-tight">
+                        <h1 class="mb-3 text-2xl leading-tight font-extrabold text-green-700 sm:mb-4 sm:text-3xl md:text-5xl lg:text-6xl">
                             Welcome to Barangay San Jose
                         </h1>
 
                         <!-- Subtitle -->
-                        <p class="text-base sm:text-lg md:text-2xl lg:text-3xl text-green-900 font-semibold mb-6 sm:mb-8">
+                        <p class="mb-6 text-base font-semibold text-green-900 sm:mb-8 sm:text-lg md:text-2xl lg:text-3xl">
                             Tagaytay City • Team Effort • Team Work
                         </p>
 
                         <!-- Buttons Container -->
-                        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center">
+                        <div class="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4">
                             <!-- Our Services Button -->
-                            <a href="#services"
-                               @click.prevent="goToSection('services')"
-                               class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-5 sm:px-6 md:px-8 py-3 text-sm sm:text-base md:text-lg font-bold rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 text-center">
+                            <a
+                                href="#services"
+                                @click.prevent="goToSection('services')"
+                                class="w-full rounded-lg bg-green-600 px-5 py-3 text-center text-sm font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-green-700 hover:shadow-xl sm:w-auto sm:px-6 sm:text-base md:px-8 md:text-lg"
+                            >
                                 Our Services
                             </a>
 
                             <!-- Contact Us Button -->
-                            <a href="#contact"
-                               @click.prevent="goToSection('contact')"
-                               class="w-full sm:w-auto bg-white hover:bg-gray-100 text-green-700 px-5 sm:px-6 md:px-8 py-3 text-sm sm:text-base md:text-lg font-bold rounded-lg shadow-lg border-2 border-green-600 transition-all duration-300 hover:shadow-xl hover:scale-105 text-center">
+                            <a
+                                href="#contact"
+                                @click.prevent="goToSection('contact')"
+                                class="w-full rounded-lg border-2 border-green-600 bg-white px-5 py-3 text-center text-sm font-bold text-green-700 shadow-lg transition-all duration-300 hover:scale-105 hover:bg-gray-100 hover:shadow-xl sm:w-auto sm:px-6 sm:text-base md:px-8 md:text-lg"
+                            >
                                 Contact Us
                             </a>
 
                             <!-- Official Login Button -->
-                            <Link :href="route('login')"
-                                class="w-full sm:w-auto bg-white hover:bg-gray-100 text-green-700 px-5 sm:px-6 md:px-8 py-3 text-sm sm:text-base md:text-lg font-bold rounded-lg shadow-lg border-2 border-green-600 transition-all duration-300 hover:shadow-xl hover:scale-105 text-center">
+                            <Link
+                                :href="route('login')"
+                                class="w-full rounded-lg border-2 border-green-600 bg-white px-5 py-3 text-center text-sm font-bold text-green-700 shadow-lg transition-all duration-300 hover:scale-105 hover:bg-gray-100 hover:shadow-xl sm:w-auto sm:px-6 sm:text-base md:px-8 md:text-lg"
+                            >
                                 Official Login
                             </Link>
                         </div>
@@ -129,7 +143,7 @@ onMounted(() => {
             </div>
 
             <!-- Content Sections -->
-            <section id="services" class="section-animate mt-10 sm:mt-20 px-4 sm:px-6 lg:px-8">
+            <section id="services" class="section-animate mt-10 px-4 sm:mt-20 sm:px-6 lg:px-8">
                 <ServiceSection />
             </section>
 
@@ -145,7 +159,7 @@ onMounted(() => {
                 <NewsEvents />
             </section>
 
-            <section id="contact" class="section-animate py-10 sm:py-16 my-8 px-4 sm:px-6 lg:px-8">
+            <section id="contact" class="section-animate my-8 px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
                 <div class="container mx-auto">
                     <Gmaps />
                     <Contacts />
