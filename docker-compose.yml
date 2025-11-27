@@ -1,57 +1,79 @@
-version: "3.9"
-
 services:
-    backend:
-        image: bitnami/laravel:11
-        container_name: backend
-        environment:
-            - DB_CONNECTION=mysql
-            - DB_HOST=mysql
-            - DB_PORT=3306
-            - DB_DATABASE=laravel
-            - DB_USERNAME=laravel
-            - DB_PASSWORD=laravel
-        volumes:
-            - .:/app
-        ports:
-            - "8000:8000"
-        depends_on:
-            - mysql
-        command:
-            [
-                "sh",
-                "-c",
-                "[ -d vendor ] || composer install && php artisan serve --host=0.0.0.0 --port=8000",
-            ]
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: brgy-backend
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=laravel
+      - DB_PASSWORD=laravel
+      - APP_ENV=local
+      - APP_DEBUG=true
+    volumes:
+      - .:/var/www/html
+    ports:
+      - '8000:8000'
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
 
-    frontend:
-        image: node:20
-        working_dir: /app
-        volumes:
-            - .:/app
-        ports:
-            - "5173:5173"
-        command: ["sh", "-c", "npm install && npm run dev -- --host"]
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: brgy-frontend
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/node_modules
+    ports:
+      - '5173:5173'
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    environment:
+      - CHOKIDAR_USEPOLLING=true
 
-    mysql:
-        image: mysql:8.4
-        container_name: brgysanjose-mysql
-        restart: always
-        environment:
-            MYSQL_ROOT_PASSWORD: secret
-            MYSQL_DATABASE: laravel
-            MYSQL_USER: laravel
-            MYSQL_PASSWORD: laravel
-        volumes:
-            - mysql_data:/var/lib/mysql
-        ports:
-            - "3306:3306"
+  mysql:
+    image: mysql:8.4
+    container_name: brgy-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
 
-    redis:
-        image: redis:alpine
-        container_name: brgysanjose-redis
-        ports:
-            - "6379:6379"
+  redis:
+    image: redis:alpine
+    container_name: brgy-redis
+    restart: always
+    ports:
+      - '6379:6379'
+    networks:
+      - app-network
 
 volumes:
-    mysql_data:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge

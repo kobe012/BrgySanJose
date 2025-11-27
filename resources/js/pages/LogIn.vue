@@ -77,9 +77,9 @@ const handleLogin = () => {
 
 
         <!-- Google OAuth Login -->
-        <a :href="route('login.google')"
+        <!-- <a :href="route('login.google')"
             class="mt-4 w-full max-w-sm bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition text-center block">
             Login with Google
-        </a>
+        </a> --> <!--not fix yet, need to bring up -->
     </div>
 </template>

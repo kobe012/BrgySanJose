@@ -1,39 +1,39 @@
 <script setup>
-import Layout from '@/layouts/Layout.vue'
-import { ref } from 'vue'
-import { router } from '@inertiajs/vue3'
+import Layout from '@/layouts/Layout.vue';
+import { router } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const form = ref({
     email: '',
-    password: ''
-})
-const errors = ref({})
+    password: '',
+});
+const errors = ref({});
 
 const submit = () => {
     router.post(route('resident.login.store'), form.value, {
-        onError: (e) => { errors.value = e }
-    })
-}
+        onError: (e) => {
+            errors.value = e;
+        },
+    });
+};
 </script>
 
 <template>
     <Layout>
-        <div class="max-w-md mx-auto mt-12 bg-white p-8 rounded-xl shadow">
-            <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
+        <div class="mx-auto mt-12 max-w-md rounded-xl bg-white p-8 shadow">
+            <h1 class="mb-6 text-center text-2xl font-bold">Login</h1>
             <form @submit.prevent="submit" class="space-y-4">
                 <div>
                     <label>Email</label>
-                    <input v-model="form.email" type="email" required class="w-full border rounded px-3 py-2" />
-                    <div v-if="errors.email" class="text-red-500 text-xs mt-1">{{ errors.email }}</div>
+                    <input v-model="form.email" type="email" required class="w-full rounded border px-3 py-2" />
+                    <div v-if="errors.email" class="mt-1 text-xs text-red-500">{{ errors.email }}</div>
                 </div>
                 <div>
                     <label>Password</label>
-                    <input v-model="form.password" type="password" required class="w-full border rounded px-3 py-2" />
-                    <div v-if="errors.password" class="text-red-500 text-xs mt-1">{{ errors.password }}</div>
+                    <input v-model="form.password" type="password" required class="w-full rounded border px-3 py-2" />
+                    <div v-if="errors.password" class="mt-1 text-xs text-red-500">{{ errors.password }}</div>
                 </div>
-                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
-                    Login
-                </button>
+                <button type="submit" class="w-full rounded bg-green-600 py-2 text-white transition hover:bg-green-700">Login</button>
             </form>
         </div>
     </Layout>

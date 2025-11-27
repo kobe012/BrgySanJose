@@ -10,8 +10,7 @@ const newsItems = [
         id: 1,
         title: 'Barangay San Jose, Tagaytay City: 2024 SGLGB National Passer! 🌠🏆',
         image: SGLGB,
-        link: 'https://www.facebook.com/share/p/12GGatYmEGV/',
-    },
+        link: 'https://www.facebook.com/share/p/12GGatYmEGV/', },
     {
         id: 2,
         title: 'Barangay San Jose receives Kalinisan, Barco, and Hapag awards! 🌟🏆',
@@ -75,7 +74,7 @@ onMounted(() => {
                     <div class="relative group">
                         <img :src="item.image" :alt="item.title" class="w-full h-64 object-cover" draggable="false" />
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            class="absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                             <div class="flex space-x-4">
                                 <a :href="item.image"
                                     class="text-white bg-green-600 p-2 rounded-full hover:bg-green-700"
